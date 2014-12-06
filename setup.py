@@ -11,7 +11,7 @@ setup(
     version=version,
     description="This product performs checks on whether a provided email"
                 "message is valid and can be posted to a group.",
-    long_description=open("README.txt").read() + "\n" +
+    long_description=open("README.rst").read() + "\n" +
     open(os.path.join("docs", "HISTORY.txt")).read(),
     # See https://pypi.python.org/pypi?%3Aaction=list_classifiers for values
     classifiers=[
@@ -38,6 +38,8 @@ setup(
         'setuptools',
         # -*- Extra requirements: -*-
     ],
+    test_suite="gs.group.list.check.tests.test_all",
+    tests_require=['mock',],
     entry_points="""
     # -*- Entry points: -*-
     """,)
