@@ -5,6 +5,15 @@ from zope.component import createObject
 from Products.GSGroup.interfaces import IGSGroupInfo
 
 
+def check_asserts(rule):
+    assert isinstance(rule, BaseRule)
+
+    assert rule.s['checked']
+    assert type(rule.s['validMessage']) == bool
+    assert type(rule.s['status']) == unicode
+    assert type(rule.s['statusNum']) == int
+
+
 class BaseRule(object):
     weight = None
 
@@ -53,3 +62,25 @@ class BaseRule(object):
             or ((retval == 0) and self.validMessage), 'Mismatch between '\
             'self.satusNum "%s" and self.canPost "%s"' %\
             (retval, self.validMessage)
+
+
+class XMailerRule(BaseRule):
+    '''Valid messages include an x-mailer header that was set by GroupServer'''
+    weight = 10
+
+    def check(self):
+        if not self.s['checked']:
+            ml = self.mailingList
+            msg = self.message
+            gs_xmailer = ml.getValueFor('xmailer')
+            if msg.get('x-mailer') != gs_xmailer:
+                self.s['validMessage'] = False
+                self.s['status'] = 'does not contain a valid x-mailer header'
+                self.s['statusNum'] = self.weight
+            else:
+                self.s['validMessage'] = True
+                self.s['status'] = 'contains valid x-mailer header'
+                self.s['statusNum'] = 0
+            self.s['checked'] = True
+
+        check_asserts(self)
