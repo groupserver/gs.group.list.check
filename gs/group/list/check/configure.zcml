@@ -7,7 +7,7 @@
   <!-- Valid Message Adaptor-->
   <adaptor
     for="gs.group.base.interfaces.IGSGroupMarker
-         ???"
+         Products.XWFMailingListManager.emailmessage.IEmailMessage"
     provides=".interfaces.IGSValidMessage"
     factory=".validmessage.IsValidMessage">
 </configure>
