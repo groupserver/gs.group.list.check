@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: gs.group.list.check
-Version: 2.0.0.dev20141121213123-d6c68ed4a477
+Version: 2.0.0.dev20141122005702-ca706a06f57d
 Summary: This product performs checks on whether a provided emailmessage is valid and can be posted to a group.
 Home-page: http://www.groupserver.org
 Author: Bill Bushey
