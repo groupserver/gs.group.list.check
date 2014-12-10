@@ -5,9 +5,9 @@
   i18n_domain="groupserver">
 
   <!-- Valid Message Adaptor-->
-  <adaptor
+  <adapter
     for="gs.group.base.interfaces.IGSGroupMarker
          Products.XWFMailingListManager.emailmessage.IEmailMessage"
     provides=".interfaces.IGSValidMessage"
-    factory=".validmessage.IsValidMessage">
+    factory=".validmessage.IsValidMessage" />
 </configure>
