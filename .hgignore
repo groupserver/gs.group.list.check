@@ -4,5 +4,6 @@ syntax: glob
 *.swp
 *egg-info
 dist
+.eggs
 *orig
 *nja
