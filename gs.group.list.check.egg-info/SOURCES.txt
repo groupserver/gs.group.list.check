@@ -22,7 +22,6 @@ gs/group/list/check/configure.zcml
 gs/group/list/check/interfaces.py
 gs/group/list/check/rules.py
 gs/group/list/check/validmessage.py
-gs/group/list/check/tests/.test_all.py.swp
 gs/group/list/check/tests/.validmessagerules.py.swp
 gs/group/list/check/tests/__init__.py
 gs/group/list/check/tests/test_all.py
