@@ -70,10 +70,9 @@ class XMailerRule(BaseRule):
 
     def check(self):
         if not self.s['checked']:
-            ml = self.mailingList
-            msg = self.message
-            gs_xmailer = ml.getValueFor('xmailer')
-            if msg.get('x-mailer') != gs_xmailer:
+            gs_xmailer = self.mailingList.getValueFor('xmailer')
+            msg_xmailer = self.message.get('x-mailer')
+            if msg_xmailer != gs_xmailer:
                 self.s['validMessage'] = False
                 self.s['status'] = 'does not contain a valid x-mailer header'
                 self.s['statusNum'] = self.weight
@@ -82,5 +81,28 @@ class XMailerRule(BaseRule):
                 self.s['status'] = 'contains valid x-mailer header'
                 self.s['statusNum'] = 0
             self.s['checked'] = True
+
+        check_asserts(self)
+
+
+class BlockedAddressRule(BaseRule):
+    '''Valid messages can not come from a blocked email address'''
+    weight = 20
+
+    def check(self):
+        if not self.s['checked']:
+            disabled = self.mailingList.getValueFor('disabled')
+            if disabled is None:
+                disabled = []
+            sender = self.message.sender
+            if sender in disabled:
+                self.s['validMessage'] = False
+                self.s['status'] = ' is from a blocked email address'
+                self.s['statusNum'] = self.weight
+            else:
+                self.s['validMessage'] = True
+                self.s['status'] = ' is from a non-blocked email address'
+                self.s['statusNum'] = 0
+        self.s['checked'] = True
 
         check_asserts(self)
