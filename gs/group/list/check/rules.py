@@ -106,3 +106,23 @@ class BlockedAddressRule(BaseRule):
         self.s['checked'] = True
 
         check_asserts(self)
+
+
+class AutomaticEmailRule(BaseRule):
+    '''Valid messages can not be automatically generated emails'''
+    weight = 30
+
+    def check(self):
+        if not self.s['checked']:
+            return_path = self.message.get('return-path')
+            if return_path == '<>':
+                self.s['validMessage'] = False
+                self.s['status'] = ' is an automatically generated email'
+                self.s['statusNum'] = self.weight
+            else:
+                self.s['validMessage'] = True
+                self.s['status'] = ' is not an automatic email'
+                self.s['statusNum'] = 0
+        self.s['checked'] = True
+
+        check_asserts(self)

@@ -3,7 +3,6 @@ from __future__ import absolute_import, unicode_literals
 from mock import patch, create_autospec
 from unittest import TestCase
 from Products.GSGroup import GSGroupInfo
-from Products.XWFMailingListManager.emailmessage import EmailMessage
 from gs.group.list.check.rules import BlockedAddressRule
 
 
@@ -68,7 +67,7 @@ class TestBlockedAddressRule(TestCase):
             ml,
             MockEmailMessage):
         # Explicitely setting empty disabled address list
-        ml.getValueFor.return_value = [] 
+        ml.getValueFor.return_value = []
 
         m = MockEmailMessage.return_value
         m.sender = 'spammer@example.com'
