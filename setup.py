@@ -36,10 +36,13 @@ setup(
     zip_safe=False,
     install_requires=[
         'setuptools',
+        'Products.GSGroup',
         # -*- Extra requirements: -*-
     ],
     test_suite="gs.group.list.check.tests.test_all",
-    tests_require=['mock',],
+    tests_require=[
+        'mock', 
+        'Products.XWFMailingListManager',],
     entry_points="""
     # -*- Entry points: -*-
     """,)
