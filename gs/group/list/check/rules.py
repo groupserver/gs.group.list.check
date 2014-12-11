@@ -126,3 +126,28 @@ class AutomaticEmailRule(BaseRule):
         self.s['checked'] = True
 
         check_asserts(self)
+
+
+class TightLoopRule(BaseRule):
+    '''Valid messages can not have recently been sent from the group'''
+    weight = 40
+
+    def check(self):
+        if not self.s['checked']:
+            assert hasattr(self.mailingList, '_v_last_email_checksum'), \
+                "no _v_last_email_checksum"
+
+            last_email_checksum = self.mailingList._v_last_email_checksum
+            current_email_checksum = self.message.post_id
+            if last_email_checksum and (last_email_checksum ==
+                                        current_email_checksum):
+                self.s['validMessage'] = False
+                self.s['status'] = ' is a duplicate, tight loop message'
+                self.s['statusNum'] = self.weight
+            else:
+                self.s['validMessage'] = True
+                self.s['status'] = ' is a unique message'
+                self.s['statusNum'] = 0
+        self.s['checked'] = True
+
+        check_asserts(self)
