@@ -1,4 +1,17 @@
 # -*- coding: utf-8 -*-
+############################################################################
+#
+# Copyright © 2014, 2015 E-Democracy.org and contributors
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+############################################################################
 from __future__ import absolute_import, unicode_literals
 from mock import patch, create_autospec
 from unittest import TestCase
@@ -17,7 +30,8 @@ class TestXMailerRule(TestCase):
         self.group = group
 
     def assert_valid_message(self, message):
-        failMsg = 'Invalid message: {0}, expected: {1}; received: {2}'.format(
+        m = 'Invalid message: {0}, expected: {1}; received: {2}'
+        failMsg = m.format(
             message.s['status'],
             message.mailingList.getValueFor('xmailer'),
             message.message.get('x-mailer'))

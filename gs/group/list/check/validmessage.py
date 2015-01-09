@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-##############################################################################
+############################################################################
 #
-# Copyright © 2013 OnlineGroups.net and Contributors.
+# Copyright © 2014, 2015 E-Democracy.org and contributors
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
@@ -11,11 +11,13 @@
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
 # FOR A PARTICULAR PURPOSE.
 #
-##############################################################################
+############################################################################
+from __future__ import absolute_import, unicode_literals
+from functools import reduce
 from operator import and_
 from zope.cachedescriptors.property import Lazy
 from zope.component import getGlobalSiteManager
-from interfaces import IGSValidMessageRule
+from .interfaces import IGSValidMessageRule
 
 
 class IsValidMessage(object):
@@ -38,7 +40,8 @@ class IsValidMessage(object):
 
     @Lazy
     def validMessage(self):
-        return reduce(and_, [rule.validMessage for rule in self.rules], True)
+        return reduce(and_, [rule.validMessage for rule in self.rules],
+                      True)
 
     @Lazy
     def statusNum(self):

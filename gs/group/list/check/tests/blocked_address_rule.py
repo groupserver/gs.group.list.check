@@ -1,4 +1,17 @@
 # -*- coding: utf-8 -*-
+############################################################################
+#
+# Copyright © 2014, 2015 E-Democracy.org and contributors
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+############################################################################
 from __future__ import absolute_import, unicode_literals
 from mock import patch, create_autospec
 from unittest import TestCase
@@ -20,11 +33,9 @@ class TestBlockedAddressRule(TestCase):
         self.group = group
 
     def assert_valid_message(self, message):
-        failMsg = (
-            'Invalid message: {0}, {1} is in blocked addresses: {2}').format(
-                message.s['status'],
-                message.message.sender,
-                message.mailingList.getValueFor('disabled'))
+        m = 'Invalid message: {0}, {1} is in blocked addresses: {2}'
+        failMsg = m.format(message.s['status'], message.message.sender,
+                           message.mailingList.getValueFor('disabled'))
         self.assertTrue(message.s['validMessage'], failMsg)
 
     def assert_invalid_message(self, message):
