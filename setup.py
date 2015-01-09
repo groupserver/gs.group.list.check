@@ -1,8 +1,29 @@
-# -*- coding=utf-8 -*-
-from __future__ import absolute_import, unicode_literals
+# -*- coding: utf-8 -*-
+############################################################################
+#
+# Copyright © 2014, 2015 OnlineGroups.net and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+############################################################################
+import codecs
 import os
 from setuptools import setup, find_packages
 from version import get_version
+
+version = get_version()
+
+with codecs.open('README.rst', encoding='utf-8') as f:
+    long_description = f.read()
+with codecs.open(os.path.join("docs", "HISTORY.rst"),
+                 encoding='utf-8') as f:
+    long_description += '\n' + f.read()
 
 version = get_version()
 
@@ -11,9 +32,7 @@ setup(
     version=version,
     description="This product performs checks on whether a provided email"
                 "message is valid and can be posted to a group.",
-    long_description=open("README.rst").read() + "\n" +
-    open(os.path.join("docs", "HISTORY.txt")).read(),
-    # See https://pypi.python.org/pypi?%3Aaction=list_classifiers for values
+    long_description=long_description,
     classifiers=[
         "Development Status :: 1 - Planning",
         "Environment :: Web Environment",
@@ -21,14 +40,14 @@ setup(
         "Intended Audience :: Developers",
         "License :: OSI Approved :: Zope Public License",
         "Natural Language :: English",
-        "Operating System :: POSIX :: Linux"
+        "Operating System :: POSIX :: Linux",
         "Programming Language :: Python",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
     keywords='groups, lists, mailinglists',
     author='Bill Bushey',
     author_email='bill.bushey@e-democracy.org',
-    url='http://www.groupserver.org',
+    url='https://github.com/groupserver/gs.group.list.check',
     license='ZPL 2.1',
     packages=find_packages(exclude=['ez_setup']),
     namespace_packages=['gs', 'gs.group', 'gs.group.list'],
@@ -41,8 +60,8 @@ setup(
     ],
     test_suite="gs.group.list.check.tests.test_all",
     tests_require=[
-        'mock', 
-        'Products.XWFMailingListManager',],
+        'mock',
+        'Products.XWFMailingListManager', ],
     entry_points="""
     # -*- Entry points: -*-
     """,)
