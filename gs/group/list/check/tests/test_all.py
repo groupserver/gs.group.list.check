@@ -20,11 +20,13 @@ from gs.group.list.check.tests.blocked_address_rule import \
     TestBlockedAddressRule
 from gs.group.list.check.tests.tight_loop_rule import TestTightLoopRule
 from gs.group.list.check.tests.x_mailer_rule import TestXMailerRule
+from gs.group.list.check.tests.validmessage import TestIsValidMessage
 testCases = (
     TestAutomaticEmailRule,
     TestBlockedAddressRule,
     TestTightLoopRule,
-    TestXMailerRule, )
+    TestXMailerRule,
+    TestIsValidMessage, )
 
 
 def load_tests(loader, tests, pattern):
