@@ -13,11 +13,12 @@
 #
 ############################################################################
 from __future__ import absolute_import, unicode_literals
-#from email.parser import Parser
 #from mock import patch
 from unittest import TestCase
+from zope.component import getGlobalSiteManager
 #from gs.group.list.check.validmessage import (IsValidMessage)
-from .faux import FauxGroup
+from gs.group.list.check.interfaces import IGSValidMessageRule
+from .faux import FauxGroup, FauxRuleInvalid, IFauxGroup
 
 
 class TestIsValidMessage(TestCase):
@@ -25,4 +26,12 @@ class TestIsValidMessage(TestCase):
         self.fauxGroup = FauxGroup()
 
     def test_vaid_only(self):
-        return True
+        self.assertTrue(True)
+
+    def test_invalid(self):
+        gsm = getGlobalSiteManager()
+        gsm.registerAdapter(FauxRuleInvalid, (IFauxGroup,),
+                            IGSValidMessageRule, 'invalid')
+        self.assertTrue(True)
+        gsm.unregisterAdapter(FauxRuleInvalid, (IFauxGroup,),
+                            IGSValidMessageRule, 'invalid')
