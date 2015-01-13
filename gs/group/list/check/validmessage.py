@@ -28,8 +28,8 @@ class IsValidMessage(object):
     @Lazy
     def adaptors(self):
         gsm = getGlobalSiteManager()
-        retval = [a for a in gsm.getAdapters((self.message, self.group),
-                  IGSValidMessageRule)]
+        retval = [a for a in gsm.getAdapters((self.group, self.message),
+                                             IGSValidMessageRule)]
         retval.sort(key=lambda r: r[1].weight)
         return retval
 
