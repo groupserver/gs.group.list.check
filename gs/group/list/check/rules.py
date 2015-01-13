@@ -13,9 +13,12 @@
 #
 ############################################################################
 from __future__ import unicode_literals, absolute_import
+from abc import ABCMeta, abstractmethod
+import sys
 from zope.cachedescriptors.property import Lazy
 from zope.component import createObject
 from Products.GSGroup.interfaces import IGSGroupInfo
+STRING = basestring if (sys.version_info < (3, )) else str
 
 
 def check_asserts(rule):
@@ -23,20 +26,34 @@ def check_asserts(rule):
 
     assert rule.s['checked']
     assert type(rule.s['validMessage']) == bool
-    assert type(rule.s['status']) == unicode
+    assert isinstance(rule.s['status'], STRING)
     assert type(rule.s['statusNum']) == int
 
 
 class BaseRule(object):
+    '''The rule abstract base class
+
+:param group: The group.
+:param message: The email message.'''
+    __metaclass__ = ABCMeta
     weight = None
 
     def __init__(self, group, message):
         self.group = group
         self.message = message
+
+        #: The state of the rule. Set once for efficency.
         self.s = {'checked': False,
                   'validMessage': False,
                   'status': 'not implemented',
                   'statusNum': -1}
+
+    @abstractmethod
+    def check(self):
+        '''Check the message
+
+:Side effects:
+  Sets the :attr:`self.s` dictionary'''
 
     @Lazy
     def groupInfo(self):
@@ -53,15 +70,11 @@ class BaseRule(object):
         retval = mailingListManager.get_list(self.groupInfo.id)
         return retval
 
-    def check(self):
-        m = 'Sub-classes must implement the check method.'
-        raise NotImplementedError(m)
-
     @Lazy
     def validMessage(self):
         self.check()
         retval = self.s['status']
-        assert type(retval) == unicode
+        assert isinstance(retval, STRING)
         return retval
 
     @Lazy
