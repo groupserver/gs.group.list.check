@@ -14,7 +14,6 @@
 ############################################################################
 from __future__ import absolute_import, unicode_literals
 from email.parser import Parser
-from zope.component import getGlobalSiteManager
 from zope.interface import Interface, implementer, directlyProvides
 from gs.group.list.check.interfaces import IGSValidMessageRule
 from Products.XWFMailingListManager.emailmessage import IEmailMessage
@@ -33,12 +32,14 @@ class FauxGroup(object):
 class FauxRuleValid(object):
     def __init__(self, message, group):
         self.validMessage = True
+        self.weight = 10
 
 
 @implementer(IGSValidMessageRule)
 class FauxRuleInvalid(object):
     def __init__(self, message, group):
         self.validMessage = False
+        self.weight = 20
 
 
 email = Parser().parsestr(
@@ -48,7 +49,3 @@ email = Parser().parsestr(
     '\n'
     'Body would go here\n')
 directlyProvides(email, IEmailMessage)
-
-gsm = getGlobalSiteManager()
-gsm.registerAdapter(FauxRuleValid, (IFauxGroup,), IGSValidMessageRule,
-                    'valid')

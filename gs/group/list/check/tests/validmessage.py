@@ -16,22 +16,31 @@ from __future__ import absolute_import, unicode_literals
 #from mock import patch
 from unittest import TestCase
 from zope.component import getGlobalSiteManager
-#from gs.group.list.check.validmessage import (IsValidMessage)
 from gs.group.list.check.interfaces import IGSValidMessageRule
-from .faux import FauxGroup, FauxRuleInvalid, IFauxGroup
+from gs.group.list.check.validmessage import (IsValidMessage)
+from Products.XWFMailingListManager.emailmessage import IEmailMessage
+from .faux import (email, FauxGroup, FauxRuleInvalid, IFauxGroup,
+                   FauxRuleValid)
 
 
 class TestIsValidMessage(TestCase):
     def setUp(self):
         self.fauxGroup = FauxGroup()
+        gsm = getGlobalSiteManager()
+        gsm.registerAdapter(FauxRuleValid, (IEmailMessage, IFauxGroup),
+                            IGSValidMessageRule, 'valid')
 
     def test_vaid_only(self):
-        self.assertTrue(True)
+        ivm = IsValidMessage(self.fauxGroup, email)
+        r = ivm.validMessage
+        self.assertTrue(r)
 
     def test_invalid(self):
         gsm = getGlobalSiteManager()
-        gsm.registerAdapter(FauxRuleInvalid, (IFauxGroup,),
+        gsm.registerAdapter(FauxRuleInvalid, (IEmailMessage, IFauxGroup),
                             IGSValidMessageRule, 'invalid')
-        self.assertTrue(True)
-        gsm.unregisterAdapter(FauxRuleInvalid, (IFauxGroup,),
-                            IGSValidMessageRule, 'invalid')
+        ivm = IsValidMessage(self.fauxGroup, email)
+        r = ivm.validMessage
+        self.assertFalse(r)
+        gsm.unregisterAdapter(FauxRuleInvalid, (IEmailMessage, IFauxGroup),
+                              IGSValidMessageRule, 'invalid')
