@@ -33,6 +33,7 @@ class FauxRuleValid(object):
     def __init__(self, message, group):
         self.validMessage = True
         self.weight = 10
+        self.statusNum = 0
 
 
 @implementer(IGSValidMessageRule)
@@ -40,6 +41,7 @@ class FauxRuleInvalid(object):
     def __init__(self, message, group):
         self.validMessage = False
         self.weight = 20
+        self.statusNum = 1
 
 
 email = Parser().parsestr(

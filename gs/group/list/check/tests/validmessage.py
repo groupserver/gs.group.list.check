@@ -32,15 +32,26 @@ class TestIsValidMessage(TestCase):
 
     def test_vaid_only(self):
         ivm = IsValidMessage(self.fauxGroup, email)
+        self.assertEqual(1, len(ivm.rules))
         r = ivm.validMessage
         self.assertTrue(r)
+        r = ivm.statusNum
+        self.assertEqual(0, r)
 
     def test_invalid(self):
         gsm = getGlobalSiteManager()
         gsm.registerAdapter(FauxRuleInvalid, (IEmailMessage, IFauxGroup),
                             IGSValidMessageRule, 'invalid')
+
         ivm = IsValidMessage(self.fauxGroup, email)
+        self.assertEqual(2, len(ivm.rules))
+        self.assertEqual([10, 20], [r.weight for r in ivm.rules])
+
         r = ivm.validMessage
         self.assertFalse(r)
+
+        r = ivm.statusNum
+        self.assertEqual(1, r)
+
         gsm.unregisterAdapter(FauxRuleInvalid, (IEmailMessage, IFauxGroup),
                               IGSValidMessageRule, 'invalid')
