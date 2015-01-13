@@ -13,25 +13,25 @@
 
   <!--The rules-->
   <adapter
-    name="gs.group.list.check.blocked"
+    name="gs-group-list-check-blocked"
     for="gs.group.base.interfaces.IGSGroupMarker
          Products.XWFMailingListManager.emailmessage.IEmailMessage"
     provides=".interfaces.IGSValidMessageRule"
     factory=".rules.BlockedAddressRule" />
   <adapter
-    name="gs.group.list.check.automatic"
+    name="gs-group-list-check-automatic"
     for="gs.group.base.interfaces.IGSGroupMarker
          Products.XWFMailingListManager.emailmessage.IEmailMessage"
     provides=".interfaces.IGSValidMessageRule"
     factory=".rules.AutomaticEmailRule" />
   <adapter
-    name="gs.group.list.check.tightloop"
+    name="gs-group-list-check-tightloop"
     for="gs.group.base.interfaces.IGSGroupMarker
          Products.XWFMailingListManager.emailmessage.IEmailMessage"
     provides=".interfaces.IGSValidMessageRule"
     factory=".rules.TightLoopRule" />
   <adapter
-    name="gs.group.list.check.forbidden"
+    name="gs-group-list-check-forbidden"
     for="gs.group.base.interfaces.IGSGroupMarker
          Products.XWFMailingListManager.emailmessage.IEmailMessage"
     provides=".interfaces.IGSValidMessageRule"
