@@ -13,81 +13,8 @@
 #
 ############################################################################
 from __future__ import unicode_literals, absolute_import
-from abc import ABCMeta, abstractmethod
-import sys
-from zope.cachedescriptors.property import Lazy
-from zope.component import createObject
-from Products.GSGroup.interfaces import IGSGroupInfo
-STRING = basestring if (sys.version_info < (3, )) else str
-
-
-def check_asserts(rule):
-    assert isinstance(rule, BaseRule)
-
-    assert rule.s['checked']
-    assert type(rule.s['validMessage']) == bool
-    assert isinstance(rule.s['status'], STRING)
-    assert type(rule.s['statusNum']) == int
-
-
-class BaseRule(object):
-    '''The rule abstract base class
-
-:param group: The group.
-:param message: The email message.'''
-    __metaclass__ = ABCMeta
-    weight = None
-
-    def __init__(self, group, message):
-        self.group = group
-        self.message = message
-
-        #: The state of the rule. Set once for efficency.
-        self.s = {'checked': False,
-                  'validMessage': False,
-                  'status': 'not implemented',
-                  'statusNum': -1}
-
-    @abstractmethod
-    def check(self):
-        '''Check the message
-
-:Side effects:
-  Sets the :attr:`self.s` dictionary'''
-
-    @Lazy
-    def groupInfo(self):
-        return IGSGroupInfo(self.group)
-
-    @Lazy
-    def siteInfo(self):
-        return createObject('groupserver.SiteInfo', self.group)
-
-    @Lazy
-    def mailingList(self):
-        site_root = self.group.site_root()
-        mailingListManager = site_root.ListManager
-        retval = mailingListManager.get_list(self.groupInfo.id)
-        return retval
-
-    @Lazy
-    def validMessage(self):
-        self.check()
-        retval = self.s['status']
-        assert isinstance(retval, STRING)
-        return retval
-
-    @Lazy
-    def statusNum(self):
-        self.check()
-        retval = self.s['statusNum']
-        assert retval in (-1, 0, self.weight), \
-            'self.statusNum is "%s", not in range: -1, 0, %s' % \
-            (retval, self.weight)
-        assert (retval in (-1, self.weight) and (not self.validMessage))\
-            or ((retval == 0) and self.validMessage), 'Mismatch between '\
-            'self.satusNum "%s" and self.canPost "%s"' %\
-            (retval, self.validMessage)
+from re import search
+from .baserule import BaseRule, check_asserts
 
 
 class XMailerRule(BaseRule):
@@ -177,4 +104,26 @@ class TightLoopRule(BaseRule):
                 self.s['statusNum'] = 0
         self.s['checked'] = True
 
+        check_asserts(self)
+
+
+class ForbiddenTextRule(BaseRule):
+    'Ensure a forbidden text is absent from the message'
+    weight = 50
+
+    def check(self):
+        if not self.s['checked']:
+            mailString = self.message.message.as_string()
+            self.s['validMessage'] = True  # Uncharacteristic optimism
+            self.s['status'] = ' is free from forbidden text'
+            self.s['statusNum'] = 0
+
+            for regexp in self.mailingList.getValueFor('spamlist'):
+                if regexp and search(regexp, mailString):
+                    self.s['validMessage'] = False
+                    m = ' matches forbidden text "{0}"'
+                    self.s['status'] = m.format(regexp)
+                    self.s['statusNum'] = self.weight
+                    break
+        self.s['checked'] = True
         check_asserts(self)
