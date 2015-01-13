@@ -17,7 +17,7 @@ from zope.interface.interface import Interface
 from zope.schema import Bool, Int, Text
 
 
-class IValidMessage(Interface):
+class IValidProperties(Interface):
     validMessage = Bool(
         title='Valid Message',
         description='Is the message valid for posting to the list?',
@@ -35,7 +35,12 @@ class IValidMessage(Interface):
                     'a textual description.',)
 
 
-class IGSValidMessageRule(IValidMessage):
+class IValidMessage(IValidProperties):
+    'The interface for the message validator'
+
+
+class IGSValidMessageRule(IValidProperties):
+    'The interface for the rules'
     weight = Int(
         title='Weight',
         description='The weight of this rule, used for sorting the rules.',
