@@ -15,8 +15,8 @@
 from __future__ import absolute_import, unicode_literals
 from email.parser import Parser
 from zope.interface import Interface, implementer, directlyProvides
+from gs.group.list.base.interfaces import IEmailMessage
 from gs.group.list.check.interfaces import IGSValidMessageRule
-from Products.XWFMailingListManager.emailmessage import IEmailMessage
 
 
 class IFauxGroup(Interface):

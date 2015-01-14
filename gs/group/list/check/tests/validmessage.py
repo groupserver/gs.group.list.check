@@ -16,9 +16,9 @@ from __future__ import absolute_import, unicode_literals
 #from mock import patch
 from unittest import TestCase
 from zope.component import getGlobalSiteManager
+from gs.group.list.base.interfaces import IEmailMessage
 from gs.group.list.check.interfaces import IGSValidMessageRule
 from gs.group.list.check.validmessage import (IsValidMessage)
-from Products.XWFMailingListManager.emailmessage import IEmailMessage
 from .faux import (email, FauxGroup, FauxRuleInvalid, IFauxGroup,
                    FauxRuleValid)
 

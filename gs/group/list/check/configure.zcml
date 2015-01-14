@@ -7,7 +7,7 @@
   <!-- Valid Message Adaptor-->
   <adapter
     for="gs.group.base.interfaces.IGSGroupMarker
-         Products.XWFMailingListManager.emailmessage.IEmailMessage"
+         gs.group.list.base.interfaces.IEmailMessage"
     provides=".interfaces.IGSValidMessage"
     factory=".validmessage.IsValidMessage" />
 
@@ -15,25 +15,25 @@
   <adapter
     name="gs-group-list-check-blocked"
     for="gs.group.base.interfaces.IGSGroupMarker
-         Products.XWFMailingListManager.emailmessage.IEmailMessage"
+         gs.group.list.base.interfaces.IEmailMessage"
     provides=".interfaces.IGSValidMessageRule"
     factory=".rules.BlockedAddressRule" />
   <adapter
     name="gs-group-list-check-automatic"
     for="gs.group.base.interfaces.IGSGroupMarker
-         Products.XWFMailingListManager.emailmessage.IEmailMessage"
+         gs.group.list.base.interfaces.IEmailMessage"
     provides=".interfaces.IGSValidMessageRule"
     factory=".rules.AutomaticEmailRule" />
   <adapter
     name="gs-group-list-check-tightloop"
     for="gs.group.base.interfaces.IGSGroupMarker
-         Products.XWFMailingListManager.emailmessage.IEmailMessage"
+         gs.group.list.base.interfaces.IEmailMessage"
     provides=".interfaces.IGSValidMessageRule"
     factory=".rules.TightLoopRule" />
   <adapter
     name="gs-group-list-check-forbidden"
     for="gs.group.base.interfaces.IGSGroupMarker
-         Products.XWFMailingListManager.emailmessage.IEmailMessage"
+         gs.group.list.base.interfaces.IEmailMessage"
     provides=".interfaces.IGSValidMessageRule"
     factory=".rules.ForbiddenTextRule" />
 
