@@ -55,13 +55,15 @@ setup(
     zip_safe=False,
     install_requires=[
         'setuptools',
-        'Products.GSGroup',
-        # -*- Extra requirements: -*-
-    ],
+        'zope.cachedescriptors',
+        'zope.component',
+        'zope.interface.interface',
+        'zope.schema',
+        'gs.group.base.interfaces.IGSGroupMarker',
+        'gs.group.list.base.interfaces.IEmailMessage',
+        'Products.GSGroup', ],
     test_suite="gs.group.list.check.tests.test_all",
-    tests_require=[
-        'mock',
-        'Products.XWFMailingListManager', ],
+    tests_require=['mock', ],
     entry_points="""
     # -*- Entry points: -*-
     """,)
