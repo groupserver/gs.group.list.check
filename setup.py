@@ -57,7 +57,7 @@ setup(
         'setuptools',
         'zope.cachedescriptors',
         'zope.component',
-        'zope.interface.interface',
+        'zope.interface',
         'zope.schema',
         'gs.group.base',
         'gs.group.list.base',
