@@ -107,3 +107,4 @@ class BaseRule(object):
             or ((retval == 0) and self.validMessage), 'Mismatch between '\
             'self.satusNum "%s" and self.canPost "%s"' %\
             (retval, self.validMessage)
+        return retval
