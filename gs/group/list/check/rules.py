@@ -14,7 +14,9 @@
 ############################################################################
 from __future__ import unicode_literals, absolute_import
 from re import search
+from zope.cachedescriptors.property import Lazy
 from .baserule import BaseRule, check_asserts
+from .queries import MemberQuery
 
 
 class XMailerRule(BaseRule):
@@ -43,13 +45,15 @@ class BlockedAddressRule(BaseRule):
     '''Valid messages can not come from a blocked email address'''
     weight = 20
 
+    @Lazy
+    def query(self):
+        retval = MemberQuery()
+        return retval
+
     def check(self):
         if not self.s['checked']:
-            disabled = self.mailingList.getValueFor('disabled')
-            if disabled is None:
-                disabled = []
             sender = self.message.sender
-            if sender in disabled:
+            if self.query.address_is_blacklisted(sender):
                 self.s['validMessage'] = False
                 self.s['status'] = ' is from a blocked email address'
                 self.s['statusNum'] = self.weight

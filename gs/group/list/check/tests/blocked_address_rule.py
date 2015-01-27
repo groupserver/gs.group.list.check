@@ -32,75 +32,26 @@ class TestBlockedAddressRule(TestCase):
         group = create_autospec(GSGroupInfo, instance=True)
         self.group = group
 
-    def assert_valid_message(self, message):
-        m = 'Invalid message: {0}, {1} is in blocked addresses: {2}'
-        failMsg = m.format(message.s['status'], message.message.sender,
-                           message.mailingList.getValueFor('disabled'))
-        self.assertTrue(message.s['validMessage'], failMsg)
-
-    def assert_invalid_message(self, message):
-        failMsg = 'Valid message: {0}'.format(message.s['status'])
-        self.assertFalse(message.s['validMessage'], failMsg)
-
     @patch('gs.group.list.base.EmailMessage')
-    @patch.object(BlockedAddressRule, 'mailingList')
-    def test_message_from_unblocked_address_is_valid(self, ml,
+    @patch.object(BlockedAddressRule, 'query')
+    def test_message_from_unblocked_address_is_valid(self, query,
                                                      MockEmailMessage):
-        # Mock the blocked addresses of the mailing list
-        ml.getValueFor.return_value = TestBlockedAddressRule.blocked_addresses
-
+        query.address_is_blacklisted.return_value = False
         m = MockEmailMessage.return_value
         m.sender = 'goodperson@example.com'
 
-        message = BlockedAddressRule(self.group, m)
-        message.check()
-        self.assert_valid_message(message)
+        rule = BlockedAddressRule(self.group, m)
+        rule.check()
+        self.assertTrue(rule.s['validMessage'])
 
     @patch('gs.group.list.base.EmailMessage')
-    @patch.object(BlockedAddressRule, 'mailingList')
-    def test_message_from_blocked_address_is_invalid(self, ml,
+    @patch.object(BlockedAddressRule, 'query')
+    def test_message_from_blocked_address_is_invalid(self, query,
                                                      MockEmailMessage):
-        # Mock the blocked addresses of the mailing list
-        ml.getValueFor.return_value = TestBlockedAddressRule.blocked_addresses
-
+        query.address_is_blacklisted.return_value = True
         m = MockEmailMessage.return_value
         m.sender = 'spammer@example.com'
 
-        message = BlockedAddressRule(self.group, m)
-        message.check()
-
-        self.assert_invalid_message(message)
-
-    @patch('gs.group.list.base.EmailMessage')
-    @patch.object(BlockedAddressRule, 'mailingList')
-    def test_message_to_list_with_no_blocked_addresses_is_valid(
-            self,
-            ml,
-            MockEmailMessage):
-        # Explicitely setting empty disabled address list
-        ml.getValueFor.return_value = []
-
-        m = MockEmailMessage.return_value
-        m.sender = 'spammer@example.com'
-
-        message = BlockedAddressRule(self.group, m)
-        message.check()
-
-        self.assert_valid_message(message)
-
-    @patch('gs.group.list.base.EmailMessage')
-    @patch.object(BlockedAddressRule, 'mailingList')
-    def test_message_to_list_with_none_blocked_addresses_list_is_valid(
-            self,
-            ml,
-            MockEmailMessage):
-        # Explicitely setting blocked addresses list to None
-        ml.getValueFor.return_value = None
-
-        m = MockEmailMessage.return_value
-        m.sender = 'spammer@example.com'
-
-        message = BlockedAddressRule(self.group, m)
-        message.check()
-
-        self.assert_valid_message(message)
+        rule = BlockedAddressRule(self.group, m)
+        rule.check()
+        self.assertFalse(rule.s['validMessage'])
