@@ -38,7 +38,7 @@ class TestTightLoopRule(TestCase):
         failMsg = 'Valid message: {0}'.format(message.s['status'])
         self.assertFalse(message.s['validMessage'], failMsg)
 
-    @patch('Products.XWFMailingListManager.emailmessage.EmailMessage')
+    @patch('gs.group.list.base.EmailMessage')
     @patch.object(TightLoopRule, 'mailingList')
     def test_unique_message_is_valid(self, ml, MockEmailMessage):
         # Mock the last_email_checksum of the mailing list
@@ -51,7 +51,7 @@ class TestTightLoopRule(TestCase):
         message.check()
         self.assert_valid_message(message)
 
-    @patch('Products.XWFMailingListManager.emailmessage.EmailMessage')
+    @patch('gs.group.list.base.EmailMessage')
     @patch.object(TightLoopRule, 'mailingList')
     def test_duplicate_message_is_invalid(self, ml, MockEmailMessage):
         # Mock the last_email_checksum of the mailing list

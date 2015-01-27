@@ -42,7 +42,7 @@ class TestBlockedAddressRule(TestCase):
         failMsg = 'Valid message: {0}'.format(message.s['status'])
         self.assertFalse(message.s['validMessage'], failMsg)
 
-    @patch('Products.XWFMailingListManager.emailmessage.EmailMessage')
+    @patch('gs.group.list.base.EmailMessage')
     @patch.object(BlockedAddressRule, 'mailingList')
     def test_message_from_unblocked_address_is_valid(self, ml,
                                                      MockEmailMessage):
@@ -56,7 +56,7 @@ class TestBlockedAddressRule(TestCase):
         message.check()
         self.assert_valid_message(message)
 
-    @patch('Products.XWFMailingListManager.emailmessage.EmailMessage')
+    @patch('gs.group.list.base.EmailMessage')
     @patch.object(BlockedAddressRule, 'mailingList')
     def test_message_from_blocked_address_is_invalid(self, ml,
                                                      MockEmailMessage):
@@ -71,7 +71,7 @@ class TestBlockedAddressRule(TestCase):
 
         self.assert_invalid_message(message)
 
-    @patch('Products.XWFMailingListManager.emailmessage.EmailMessage')
+    @patch('gs.group.list.base.EmailMessage')
     @patch.object(BlockedAddressRule, 'mailingList')
     def test_message_to_list_with_no_blocked_addresses_is_valid(
             self,
@@ -88,7 +88,7 @@ class TestBlockedAddressRule(TestCase):
 
         self.assert_valid_message(message)
 
-    @patch('Products.XWFMailingListManager.emailmessage.EmailMessage')
+    @patch('gs.group.list.base.EmailMessage')
     @patch.object(BlockedAddressRule, 'mailingList')
     def test_message_to_list_with_none_blocked_addresses_list_is_valid(
             self,

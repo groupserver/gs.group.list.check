@@ -38,7 +38,7 @@ class TestAutomaticEmailRule(TestCase):
         failMsg = 'Valid message: {0}'.format(message.s['status'])
         self.assertFalse(message.s['validMessage'], failMsg)
 
-    @patch('Products.XWFMailingListManager.emailmessage.EmailMessage')
+    @patch('gs.group.list.base.EmailMessage')
     def test_non_automatic_message_is_valid(self, MockEmailMessage):
         m = MockEmailMessage.return_value
         m.get.return_value = 'realperson@example.com'
@@ -47,7 +47,7 @@ class TestAutomaticEmailRule(TestCase):
         message.check()
         self.assert_valid_message(message)
 
-    @patch('Products.XWFMailingListManager.emailmessage.EmailMessage')
+    @patch('gs.group.list.base.EmailMessage')
     def test_automatic_message_is_invalid(self, MockEmailMessage):
         m = MockEmailMessage.return_value
         m.get.return_value = '<>'

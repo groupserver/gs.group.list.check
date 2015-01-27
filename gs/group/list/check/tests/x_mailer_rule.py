@@ -16,7 +16,7 @@ from __future__ import absolute_import, unicode_literals
 from mock import patch, create_autospec
 from unittest import TestCase
 from Products.GSGroup import GSGroupInfo
-from Products.XWFMailingListManager.emailmessage import EmailMessage
+from gs.group.list.base import EmailMessage
 from gs.group.list.check.rules import XMailerRule
 
 
