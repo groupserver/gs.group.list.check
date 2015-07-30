@@ -112,7 +112,8 @@ class TightLoopRule(BaseRule):
 
 
 class ForbiddenTextRule(BaseRule):
-    'Ensure a forbidden text is absent from the message'
+    '''Ensure a forbidden text is absent from the message. Normally this
+is for "out of office" autoreply messages '''
     weight = 50
 
     def check(self):
